@@ -1,10 +1,18 @@
 package Base_Class;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -19,6 +27,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Base_Class {
 	public static WebDriver driver;
+	private static String value;
 
 	public static WebDriver getBrowser(String type) {
 		try {
@@ -124,6 +133,29 @@ public class Base_Class {
 		wait.until(ExpectedConditions.visibilityOf(element));
 
 	}
+	
+	public static String DataFromExcel(String path, int row_Index,int cell_Index) throws Throwable {
+	
+	File f = new File(path);
+	FileInputStream fis = new FileInputStream(f);
+	 Workbook w = new XSSFWorkbook(fis);
+	 Sheet sheetAt = w.getSheetAt(0);
+	 Row row = sheetAt.getRow(row_Index);
+	 Cell cell = row.getCell(cell_Index);
+	 CellType cellType = cell.getCellType();
+	 if(cellType.equals(CellType.STRING)) {
+		value = cell.getStringCellValue();
+		
+	 }
+	 else if(cellType.equals(CellType.NUMERIC)) {
+		 double numericCellValue = cell.getNumericCellValue();
+		 int val = (int) numericCellValue;
+			value=String.valueOf(val);	 
+	 }
+	return value;
+	}
+	
+
 	
 	public static void actionsClass(String actionName, WebElement element) {
 		try {

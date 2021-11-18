@@ -9,9 +9,9 @@ public class Confirm {
 
 public WebDriver Driver;
 
-@FindBy(xpath="//input[@value='My Itinerary']")
+@FindBy(xpath="//*[@id=\"my_itinerary\"]")
 private WebElement item;
-@FindBy(id="check_all")
+@FindBy(xpath="//*[@id=\"check_all\"]")
 private WebElement checker;
 
 public WebElement getItem() {

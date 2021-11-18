@@ -2,68 +2,64 @@ package com.Oct_30_Mini_Project;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import com.pom.Home_Page;
-import com.pom.Login_page;
-import com.pom.My_Store;
-import com.pom.Order;
-import com.pom.Payment;
-import com.pom.Printer_Summer;
-import com.pom.Shipping;
-import com.pom.Women_MyStore;
-import com.pom.back;
+import com.Helper.File_Reader_Manager;
+import com.POBJ_MAG.Page_Object_Manager1;
+
 
 import Base_Class.Base_Class;
 
 public class Test_Runner extends Base_Class {
 	public static WebDriver driver = Base_Class.getBrowser("chrome");
-	public static Home_Page ap = new Home_Page(driver);
-	public static Login_page lg = new Login_page(driver);
-	public static My_Store st = new My_Store(driver);
-	public static back bk = new back(driver);
-	public static Women_MyStore se = new Women_MyStore(driver);
-	public static Printer_Summer ps = new Printer_Summer(driver);
-	public static Order od = new Order(driver);
-	public static Shipping sp = new Shipping(driver);
-	public static Payment pay = new Payment(driver);
+	public static Page_Object_Manager1 pom = new Page_Object_Manager1(driver);
+	static Logger log = Logger.getLogger(Test_Runner.class);
+	public static void main(String[] args) throws Throwable {
+		PropertyConfigurator.configure("log4j.properties");
+		String url = File_Reader_Manager.getInstanceFRM().getInstanceCR().getURL();
+		getURL(url);
+		log.info("load_url");
+		clickOnElement(pom.getInstanceHp().getSigin());
+		
+//		String username = File_Reader_Manager.getInstanceFRM().getInstanceCR().getUsername();
+		String dataFromExcel = DataFromExcel("C:\\Users\\krbch\\eclipse-workspace\\Oct_30_Mini_Project\\EXCEL\\Adactin.xlsx",6,0);
+		inputValueElement(pom.getInstancelg().getEmail(), dataFromExcel);
+		log.info("Pass_EmailID");
+//		String password = File_Reader_Manager.getInstanceFRM().getInstanceCR().getPassword();
+		String dataFromExcel2 = DataFromExcel("C:\\Users\\krbch\\eclipse-workspace\\Oct_30_Mini_Project\\EXCEL\\Adactin.xlsx",7,0);
+		inputValueElement(pom.getInstancelg().getPwd(), dataFromExcel2 );
+         log.info("Pass_password");
+		clickOnElement(pom.getInstancelg().getSigin());
 
-	public static void main(String[] args) throws InterruptedException, IOException {
-		getURL("http://automationpractice.com/index.php");
-		clickOnElement(ap.getSigin());
+		clickOnElement(pom.getbk().getBack());
+		log.info("Go_BACK HOME PAGE");
+        
+		clickOnElement(pom.getst().getWomen());
 
-		inputValueElement(lg.getEmail(), "nowasew810@specialistblog.com");
-
-		inputValueElement(lg.getPwd(), "Sel@12345");
-
-		clickOnElement(lg.getSigin());
-
-		clickOnElement(bk.getBack());
-
-		clickOnElement(st.getWomen());
-
-		clickOnElement(se.getSelect());
-		clickOnElement(se.getSelect1());
-		clickOnElement(ps.getCart());
+		clickOnElement(pom.getse().getSelect());
+		clickOnElement(pom.getse().getSelect1());
+		clickOnElement(pom.getps().getCart());
 		sleep(2000);
-
-		clickOnElement(ps.cout);
+          log.info("Add_to_Cart");
+		clickOnElement(pom.getps().getCout());
 		sleep(1000);
 
-		clickOnElement(od.getCartout());
+		clickOnElement(pom.getod().getCartout());
 
-		clickOnElement(od.getAdd());
+		clickOnElement(pom.getod().getAdd());
 
-		clickOnElement(sp.getCheckbox());
+		clickOnElement(pom.getsp().getCheckbox());
 
-		clickOnElement(sp.getFout());
+		clickOnElement(pom.getsp().getFout());
 
-		clickOnElement(pay.getPay());
+		clickOnElement(pom.getpay().getPay());
 		takeScreenShot("cartfinal");
 
-		clickOnElement(pay.getOutdel());
+		clickOnElement(pom.getpay().getOutdel());
 
 	}
 }
